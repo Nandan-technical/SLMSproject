@@ -1,0 +1,2 @@
+# SLMSproject
+Its a djangoproject
