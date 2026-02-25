@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Staff Dashboard</title>
+
+   <style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Poppins:wght@300;500;700&display=swap');
+
+/* ====== BODY : STORM REALM ====== */
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    color: #eaf6ff;
+    padding: 30px;
+
+    background:
+      radial-gradient(circle at center, rgba(0,180,255,0.25), transparent 65%),
+      url("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Thor%27s_hammer_Mjolnir.svg/1024px-Thor%27s_hammer_Mjolnir.svg.png"),
+      linear-gradient(180deg, #020024, #040b2e, #000);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 45%, cover;
+    background-blend-mode: screen;
+
+    animation: stormPulse 6s infinite alternate;
+}
+
+@keyframes stormPulse {
+    from { filter: brightness(1); }
+    to   { filter: brightness(1.15); }
+}
+
+/* ====== NAVBAR : GOD BAR ====== */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 40px;
+    border-radius: 50px;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(25px);
+    box-shadow:
+        0 0 40px rgba(0,180,255,0.6),
+        inset 0 0 20px rgba(255,255,255,0.15);
+    margin-bottom: 50px;
+}
+
+nav div {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    color: #9fdcff;
+    text-shadow: 0 0 20px rgba(0,180,255,0.8);
+}
+
+nav a {
+    padding: 12px 34px;
+    border-radius: 40px;
+    text-decoration: none;
+    font-weight: 700;
+    color: #000;
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    box-shadow: 0 0 45px rgba(0,180,255,1);
+    transition: 0.4s ease;
+}
+
+nav a:hover {
+    transform: translateY(-4px) scale(1.15);
+    box-shadow: 0 0 80px rgba(0,180,255,1);
+}
+
+/* ====== WELCOME TITLE ====== */
+h1 {
+    text-align: center;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3rem;
+    letter-spacing: 4px;
+    margin-bottom: 60px;
+    background: linear-gradient(90deg, #9fdcff, #ffffff, #9fdcff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 35px rgba(180,220,255,0.9);
+}
+
+/* ====== DASHBOARD ====== */
+.dashboard {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    flex-wrap: wrap;
+}
+
+/* ====== THOR CARDS ====== */
+.card {
+    width: 320px;
+    padding: 35px;
+    border-radius: 30px;
+    text-align: center;
+    background: rgba(255,255,255,0.07);
+    backdrop-filter: blur(25px);
+
+    box-shadow:
+        0 0 50px rgba(0,180,255,0.4),
+        inset 0 0 25px rgba(255,255,255,0.15);
+
+    transform-style: preserve-3d;
+    transition: 0.45s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Lightning slash */
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(180,220,255,0.6),
+        transparent
+    );
+    transform: translateX(-120%);
+}
+
+.card:hover::before {
+    animation: lightning 1.2s linear;
+}
+
+@keyframes lightning {
+    to { transform: translateX(120%); }
+}
+
+/* Hover power */
+.card:hover {
+    transform: translateY(-22px) rotateX(8deg) scale(1.08);
+    box-shadow:
+        0 35px 70px rgba(0,180,255,0.7),
+        inset 0 0 35px rgba(255,255,255,0.25);
+}
+
+/* ====== CARD TEXT ====== */
+.card h4 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    color: #bfe6ff;
+    text-shadow: 0 0 20px rgba(180,220,255,0.8);
+}
+
+.card p {
+    font-size: 0.95rem;
+    margin-bottom: 25px;
+    opacity: 0.9;
+}
+
+/* ====== HAMMER BUTTON ====== */
+.card a {
+    display: inline-block;
+    padding: 14px 40px;
+    border-radius: 50px;
+    font-weight: 800;
+    text-decoration: none;
+    color: #000;
+    background: linear-gradient(135deg, #d9f3ff, #00c6ff);
+    box-shadow: 0 0 45px rgba(180,220,255,1);
+    transition: 0.4s ease;
+}
+
+.card a:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 75px rgba(180,220,255,1);
+}
+</style>
+
+</head>
+
+<body>
+
+    <nav>
+        <div>SLMS Staff</div>
+        <a href="{% url 'logout' %}">Logout</a>
+    </nav>
+
+    <h1>Welcome, {{ request.user.username }}</h1>
+
+    <div class="dashboard">
+        <div class="card">
+            <h4>Apply Leave</h4>
+            <p>Submit a leave request</p>
+            <a href="{% url 'apply_leave' %}">Apply</a>
+        </div>
+
+        <div class="card">
+            <h4>My Leave Status</h4>
+            <p>View your leave requests</p>
+            <a href="{% url 'my_leaves' %}">View</a>
+        </div>
+    </div>
+
+</body>
+</html>

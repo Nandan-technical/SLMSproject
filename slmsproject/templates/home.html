@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SLMS | Staff Leave Management System</title>
+
+<style>
+/* ===== RESET ===== */
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{
+    height:100vh;
+    background:#04060c;
+    overflow:hidden;
+    color:#fff;
+}
+
+/* ===== COSMIC BACKGROUND ===== */
+.cosmos{
+    position:fixed;
+    inset:-60%;
+    background:
+        radial-gradient(circle at 20% 30%, #00c6ff66, transparent 40%),
+        radial-gradient(circle at 80% 25%, #7f00ff66, transparent 45%),
+        radial-gradient(circle at 50% 80%, #00ffd566, transparent 40%);
+    filter:blur(140px);
+    animation:spin 30s linear infinite;
+    z-index:-3;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ===== ENERGY GRID ===== */
+.grid{
+    position:fixed;
+    inset:0;
+    background:
+        linear-gradient(transparent 95%,rgba(255,255,255,.03)),
+        linear-gradient(90deg,transparent 95%,rgba(255,255,255,.03));
+    background-size:40px 40px;
+    z-index:-2;
+}
+
+/* ===== CURSOR ENERGY ===== */
+.cursor{
+    position:fixed;
+    width:160px;
+    height:160px;
+    border-radius:50%;
+    background:radial-gradient(circle,#00eaff55,transparent 70%);
+    pointer-events:none;
+    transform:translate(-50%,-50%);
+    z-index:-1;
+}
+
+/* ===== HERO ===== */
+.hero{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* ===== CARD ===== */
+.card{
+    width:480px;
+    padding:60px 55px;
+    text-align:center;
+    background:rgba(255,255,255,.12);
+    backdrop-filter:blur(24px);
+    border-radius:28px;
+    box-shadow:0 60px 120px rgba(0,0,0,.8);
+    position:relative;
+    transition:transform .12s ease;
+}
+
+/* Neon border pulse */
+.card::before{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    border-radius:30px;
+    background:linear-gradient(120deg,#00c6ff,#7f00ff,#00ffd5);
+    z-index:-1;
+    animation:hue 5s linear infinite;
+}
+@keyframes hue{to{filter:hue-rotate(360deg);}}
+
+/* ===== SVG LOGO ===== */
+.logo svg{
+    width:120px;
+    height:120px;
+}
+.logo path{
+    fill:none;
+    stroke:url(#grad);
+    stroke-width:8;
+    stroke-dasharray:300;
+    stroke-dashoffset:300;
+    animation:draw 3s ease forwards infinite alternate;
+}
+@keyframes draw{
+    to{stroke-dashoffset:0;}
+}
+
+.card h2{
+    margin-top:18px;
+    font-size:18px;
+    letter-spacing:1px;
+    opacity:.85;
+}
+
+/* ===== BUTTONS ===== */
+.btn-group{
+    margin-top:50px;
+    display:flex;
+    justify-content:center;
+    gap:28px;
+}
+.btn{
+    padding:16px 46px;
+    border-radius:45px;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:600;
+    position:relative;
+    overflow:hidden;
+    transition:.4s;
+}
+.login{background:linear-gradient(135deg,#00c6ff,#0072ff);color:#fff;}
+.register{border:2px solid #fff;color:#fff;}
+
+.btn::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:radial-gradient(circle,rgba(255,255,255,.6),transparent 70%);
+    opacity:0;
+    transition:.3s;
+}
+.btn:hover::after{opacity:1;}
+.btn:hover{
+    transform:scale(1.18);
+    box-shadow:0 0 40px #00c6ff;
+}
+
+/* ===== FOOTER ===== */
+footer{
+    position:absolute;
+    bottom:18px;
+    width:100%;
+    text-align:center;
+    font-size:12px;
+    opacity:.7;
+}
+
+/* ===== PORTAL TRANSITION ===== */
+.portal{
+    position:fixed;
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    background:#00eaff;
+    transform:scale(0);
+    animation:portal .8s ease-out forwards;
+    z-index:999;
+}
+@keyframes portal{
+    to{
+        transform:scale(100);
+        opacity:0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="cosmos"></div>
+<div class="grid"></div>
+<div class="cursor" id="cursor"></div>
+
+<div class="hero">
+    <div class="card" id="card">
+
+        <div class="logo">
+            <svg viewBox="0 0 100 100">
+                <defs>
+                    <linearGradient id="grad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="0">
+                        <stop offset="0%" stop-color="#00c6ff"/>
+                        <stop offset="50%" stop-color="#7f00ff"/>
+                        <stop offset="100%" stop-color="#00ffd5"/>
+                    </linearGradient>
+                </defs>
+                <path d="M20 70 L20 30 L50 30 L50 70 L80 70"/>
+            </svg>
+        </div>
+
+        <h2>Staff Leave Management System</h2>
+
+        <div class="btn-group">
+            <a href="{% url 'login' %}" class="btn login">Login</a>
+            <a href="{% url 'register' %}" class="btn register">Register</a>
+        </div>
+
+    </div>
+</div>
+
+<footer>© 2026 SLMS | All rights reserved</footer>
+
+<script>
+/* ===== CURSOR ENERGY ===== */
+const cursor=document.getElementById("cursor");
+document.addEventListener("mousemove",e=>{
+    cursor.style.left=e.clientX+"px";
+    cursor.style.top=e.clientY+"px";
+});
+
+/* ===== 3D PHYSICS TILT ===== */
+const card=document.getElementById("card");
+document.addEventListener("mousemove",e=>{
+    const x=(window.innerWidth/2-e.clientX)/28;
+    const y=(window.innerHeight/2-e.clientY)/28;
+    card.style.transform=`rotateY(${x}deg) rotateX(${y}deg)`;
+});
+
+/* ===== PORTAL TRANSITION ===== */
+document.querySelectorAll(".btn").forEach(btn=>{
+    btn.addEventListener("click",e=>{
+        const p=document.createElement("div");
+        p.className="portal";
+        p.style.left=e.clientX+"px";
+        p.style.top=e.clientY+"px";
+        document.body.appendChild(p);
+    });
+});
+</script>
+
+</body>
+</html>

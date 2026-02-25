@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+
+ <style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Poppins:wght@300;500;700&display=swap');
+
+/* ====== BODY ====== */
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    color: #eaffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px;
+
+    /* Avengers Symbol Background */
+    background:
+      radial-gradient(circle at center, rgba(0,255,255,0.15), transparent 60%),
+      url("https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Avengers_%28film%29_logo.svg/1024px-Avengers_%28film%29_logo.svg.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 55%, cover;
+    background-color: #020024;
+    background-blend-mode: screen;
+}
+
+/* ====== TITLE ====== */
+h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3.2rem;
+    letter-spacing: 6px;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #00ffff, #00ff88);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 35px rgba(0,255,255,0.9);
+}
+
+/* ====== NAV ====== */
+.nav {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.nav a {
+    padding: 14px 40px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    color: #000;
+    background: linear-gradient(135deg, #00ffff, #00ff88);
+    box-shadow: 0 0 45px rgba(0,255,255,1);
+    transition: 0.4s ease;
+}
+
+.nav a:hover {
+    transform: translateY(-6px) scale(1.15);
+    box-shadow: 0 0 80px rgba(0,255,255,1);
+}
+
+/* ====== CARD CONTAINER ====== */
+.card {
+    width: 360px;
+    padding: 30px;
+    margin: 25px;
+    border-radius: 28px;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(25px);
+    text-align: center;
+
+    box-shadow:
+        0 0 45px rgba(0,255,255,0.35),
+        inset 0 0 30px rgba(255,255,255,0.15);
+
+    transform-style: preserve-3d;
+    transition: 0.45s ease;
+}
+
+/* 3D hover */
+.card:hover {
+    transform: translateY(-20px) rotateX(8deg) scale(1.08);
+    box-shadow:
+        0 30px 60px rgba(0,255,255,0.6),
+        inset 0 0 40px rgba(255,255,255,0.2);
+}
+
+/* ====== CARD TEXT ====== */
+.card h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    color: #00ffff;
+    text-shadow: 0 0 20px rgba(0,255,255,0.8);
+}
+
+.card p {
+    font-size: 0.95rem;
+    opacity: 0.9;
+    margin-bottom: 22px;
+}
+
+/* ====== CARD BUTTON ====== */
+.card a {
+    display: inline-block;
+    padding: 12px 34px;
+    border-radius: 40px;
+    font-weight: 700;
+    text-decoration: none;
+    color: #000;
+    background: linear-gradient(135deg, #00ff88, #00c853);
+    box-shadow: 0 0 35px rgba(0,255,136,0.9);
+    transition: 0.4s ease;
+}
+
+.card a:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 65px rgba(0,255,136,1);
+}
+</style>
+
+</head>
+
+<body>
+
+    <h2>Admin Dashboard</h2>
+
+    <div class="nav">
+        <a href="{% url 'add_staff' %}">View Leave Requests</a>
+        <a href="{% url 'logout' %}">Logout</a>
+    </div>
+
+    <div class="card">
+        <h3>Total Leave Requests</h3>
+        <p>Manage all the staff leave applications</p>
+        <a href="{% url 'view_leaves' %}">Open</a>
+    </div>
+
+    <div class="card">
+        <h3>Staff Management</h3>
+        <p>View registered staff users</p>
+        <a href="{% url 'manage_staff' %}">Manage Staff</a>
+    </div>
+
+</body>
+</html>

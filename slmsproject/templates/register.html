@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SLMS Register – Ultra Lamp UI</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  height: 100vh;
+  background: radial-gradient(circle at top, #0d0d18, #000);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* ===== SCENE ===== */
+.scene {
+  position: relative;
+  width: 900px;
+  height: 500px;
+}
+
+/* ===== LAMP ===== */
+.lamp {
+  position: absolute;
+  left: 80px;
+  top: 80px;
+  width: 120px;
+  height: 160px;
+  background: linear-gradient(#555, #222);
+  border-radius: 50% 50% 40% 40%;
+  animation: lampDrop 1.5s ease forwards;
+}
+
+.lamp::after {
+  content: "";
+  position: absolute;
+  top: 100px;
+  left: -220px;
+  width: 520px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(255,180,100,0.5), transparent 70%);
+  filter: blur(28px);
+  opacity: 0;
+}
+
+/* Lamp ON */
+.lamp.on::after {
+  opacity: 1;
+  animation: pulse 3s infinite ease-in-out;
+}
+
+/* ===== REGISTER BOX ===== */
+.register-box {
+  position: absolute;
+  right: 80px;
+  top: 40px;
+  width: 380px;
+  padding: 30px;
+  background: rgba(15, 15, 30, 0.9);
+  border-radius: 25px;
+  transform: perspective(900px) rotateY(-18deg);
+  animation: boxIn 1.8s ease forwards, neonBreath 4s infinite ease-in-out;
+}
+
+.register-box h1 {
+  color: #fff;
+  font-size: 20px;
+  text-align: center;
+}
+
+.register-box h2 {
+  color: #aaa;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* INPUTS */
+.register-box input,
+.register-box select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 14px;
+  background: #0c0c18;
+  border: 1px solid #333;
+  color: #fff;
+  border-radius: 10px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.register-box input:focus,
+.register-box select:focus {
+  border-color: #ff7aa2;
+  box-shadow: 0 0 15px #ff7aa2;
+}
+
+/* INFO */
+.info {
+  color: #999;
+  font-size: 12px;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* BUTTON */
+.register-box button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ff7aa2, #ff3c6f);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.register-box button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(255,60,120,0.6);
+}
+
+/* LINKS */
+.links {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.links a {
+  color: #ff7aa2;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.links a:hover {
+  text-decoration: underline;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes lampDrop {
+  from { opacity: 0; transform: translateY(-40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes boxIn {
+  from {
+    opacity: 0;
+    transform: perspective(900px) rotateY(-30deg) translateX(60px);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(900px) rotateY(-15deg);
+  }
+}
+
+@keyframes neonBreath {
+  0% { box-shadow: 0 0 25px rgba(255,120,200,0.3); }
+  50% { box-shadow: 0 0 55px rgba(255,120,200,0.7); }
+  100% { box-shadow: 0 0 25px rgba(255,120,200,0.3); }
+}
+
+@keyframes pulse {
+  0% { filter: blur(22px); opacity: 0.6; }
+  50% { filter: blur(32px); opacity: 1; }
+  100% { filter: blur(22px); opacity: 0.6; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="scene">
+  <div class="lamp"></div>
+
+  <div class="register-box">
+    <h1>SLMS REGISTRATION FORM</h1>
+    <h2>Staff Leave Management System</h2>
+
+    <form method="post">
+      {% csrf_token %}
+
+      <input type="text" name="username" placeholder="Username" required>
+      <input type="password" name="password" placeholder="Password" required>
+
+      <select name="role" required>
+        <option value="">-- Select Role --</option>
+        <option value="admin">Admin</option>
+        <option value="staff">Staff</option>
+      </select>
+
+      <p class="info">
+        Admin can manage staff and approve leave requests
+      </p>
+
+      <button type="submit">REGISTER</button>
+    </form>
+
+    <div class="links">
+      <p>Already have an account?
+        <a href="{% url 'login' %}">Login</a>
+      </p>
+      <p>
+        <a href="{% url 'home' %}">Back to Home</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+const lamp = document.querySelector('.lamp');
+const box = document.querySelector('.register-box');
+const inputs = document.querySelectorAll('input, select');
+
+/* Lamp turns ON when user interacts */
+inputs.forEach(input => {
+  input.addEventListener('focus', () => {
+    lamp.classList.add('on');
+  });
+});
+
+/* Mouse-based REAL 3D tilt */
+document.addEventListener('mousemove', (e) => {
+  const x = (window.innerWidth / 2 - e.clientX) / 25;
+  const y = (window.innerHeight / 2 - e.clientY) / 25;
+
+  box.style.transform =
+    `perspective(1000px) rotateY(${x}deg) rotateX(${y}deg)`;
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@300;500;700&display=swap');
+
+:root {
+  --cyan: #00ffff;
+  --green: #00ff88;
+  --red: #ff3b3b;
+  --yellow: #ffd700;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    linear-gradient(transparent 95%, rgba(0,255,255,.15) 96%),
+    linear-gradient(90deg, transparent 95%, rgba(0,255,255,.15) 96%),
+    radial-gradient(circle at top, #020024, #000);
+  background-size: 40px 40px, 40px 40px, cover;
+  font-family: 'Poppins', sans-serif;
+  color: #eaffff;
+  padding: 40px;
+}
+
+/* Title */
+h2 {
+  font-family: 'Orbitron';
+  text-align: center;
+  font-size: 3rem;
+  letter-spacing: 5px;
+  margin-bottom: 40px;
+  color: var(--cyan);
+  text-shadow: 0 0 35px var(--cyan);
+}
+
+/* Table */
+table {
+  width: 100%;
+  max-width: 1400px;
+  margin: auto;
+  border-collapse: separate;
+  border-spacing: 0 20px;
+  perspective: 2000px;
+}
+
+/* Headers */
+th {
+  padding: 18px;
+  background: linear-gradient(135deg, var(--cyan), #0072ff);
+  color: #000;
+  border-radius: 16px;
+  box-shadow: 0 0 35px var(--cyan);
+}
+
+/* Rows */
+tr {
+  position: relative;
+  background: rgba(255,255,255,0.07);
+  backdrop-filter: blur(20px);
+  transform-style: preserve-3d;
+  transition: .45s ease;
+  overflow: hidden;
+}
+
+/* Energy scan line */
+tr::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(0,255,255,.35),
+    transparent
+  );
+  transform: translateX(-120%);
+}
+
+tr:hover::before {
+  animation: scan 1.2s linear;
+}
+
+@keyframes scan {
+  to { transform: translateX(120%); }
+}
+
+/* 3D hover */
+tr:hover {
+  transform: translateZ(50px) scale(1.04);
+  box-shadow: 0 30px 60px rgba(0,255,255,.45);
+}
+
+/* Cells */
+td {
+  padding: 18px;
+  text-align: center;
+  border-radius: 16px;
+}
+
+/* STATUS CORE */
+.pending {
+  color: var(--yellow);
+  text-shadow: 0 0 18px var(--yellow);
+}
+.approved {
+  color: var(--green);
+  text-shadow: 0 0 20px var(--green);
+}
+.rejected {
+  color: var(--red);
+  text-shadow: 0 0 20px var(--red);
+}
+
+/* Action buttons */
+td a {
+  position: relative;
+  padding: 12px 28px;
+  margin: 0 6px;
+  border-radius: 40px;
+  text-decoration: none;
+  font-weight: 700;
+  color: #000;
+  overflow: hidden;
+  transition: .35s;
+}
+
+/* Plasma ripple */
+td a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255,255,255,.6), transparent 60%);
+  opacity: 0;
+  transition: .4s;
+}
+
+td a:hover::after {
+  opacity: 1;
+}
+
+/* Approve */
+a[href*="approve"] {
+  background: linear-gradient(135deg, var(--green), #00c853);
+  box-shadow: 0 0 35px var(--green);
+}
+
+/* Reject */
+a[href*="reject"] {
+  background: linear-gradient(135deg, var(--red), #b71c1c);
+  box-shadow: 0 0 35px var(--red);
+}
+
+/* Button hover */
+td a:hover {
+  transform: scale(1.18) rotateX(12deg);
+  box-shadow: 0 0 65px white;
+}
+
+/* Back */
+p {
+  text-align: center;
+  margin-top: 40px;
+}
+
+p a {
+  padding: 16px 42px;
+  border-radius: 50px;
+  background: linear-gradient(135deg, var(--cyan), var(--green));
+  box-shadow: 0 0 60px var(--cyan);
+  color: #000;
+  text-decoration: none;
+}
+</style>
+<script>
+document.querySelectorAll("tr").forEach(row => {
+  row.addEventListener("mousemove", e => {
+    const rect = row.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+
+    row.style.transform =
+      `rotateX(${-y / 15}deg) rotateY(${x / 15}deg) scale(1.05)`;
+  });
+
+  row.addEventListener("mouseleave", () => {
+    row.style.transform = "none";
+  });
+});
+</script>
+
+<body>
+    <h2>Staff leave requets</h2>
+    <table>
+        <tr>
+            <th>Staff Name</th>
+            <th>Leave type</th>
+            <th>start_date</th>
+            <th>end date</th>
+            <th>reason</th>
+            <th>status</th>
+            <th>action</th>
+            
+        </tr>
+        {% for i in leaves %}
+        <tr>
+            <td>{{i.user.username}}</td>
+            <td>{{i.leave_type}}</td>
+            <td>{{i.start_date}}</td>
+            <td>{{i.end_date}}</td>
+            <td>{{i.reason}}</td>
+            <td class="{{i.status}}">{{i.status}}</td>
+            <td>
+                {% if i.status == 'pending' %}
+
+                <a href="{% url 'approve_leave' i.id %}">Approve</a>
+                <a href="{% url 'reject_leave' i.id %}">reject</a>
+                {% endif %}
+            </td>
+          
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7"> no leave reuests found</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <p><a href="{% url 'admin_dashboard' %}">back to dashboard</a></p>
+</body>
+</html>
